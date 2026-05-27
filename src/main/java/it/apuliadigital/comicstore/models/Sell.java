@@ -1,4 +1,4 @@
-package it.apuliadigital.fumetteria.models;
+package it.apuliadigital.comicstore.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
