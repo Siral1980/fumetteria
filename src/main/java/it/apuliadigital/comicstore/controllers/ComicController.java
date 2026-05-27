@@ -62,7 +62,7 @@ public class ComicController {
     }
 
     @PutMapping("/restockComic")
-    public ResponseEntity<Comic> restockComic(@RequestParam String title, @RequestParam String author, @RequestParam String genre, @RequestParam double price) {
+    public ResponseEntity<Comic> restockComic(@RequestParam String title,  String author,  String genre, double price) {
         Comic updatedComic = comicService.updateComic(title, author, genre, price);
         return ResponseEntity.ok(updatedComic);
     }
