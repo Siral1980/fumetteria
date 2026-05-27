@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Fumetteria - Comic Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.8s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .comics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .comic-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            animation: fadeIn 0.8s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .comic-item:hover {
+            transform: scale(1.05);
+        }
+
+        .comic-cover {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .comic-info {
+            padding: 20px;
+        }
+
+        .comic-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .comic-author {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .comic-genre {
+            display: inline-block;
+            background: #f0f0f0;
+            color: #667eea;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            margin-bottom: 12px;
+        }
+
+        .comic-price {
+            font-size: 1.5em;
+            color: #4caf50;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .comic-quantity {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .comic-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .comic-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.9em;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .stats-box {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .stats-box .number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stats-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .comics-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Fumetteria</h1>
+            <p>Il tuo negozio online di fumetti preferito</p>
+        </header>
+
+        <div id="alerts"></div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('explore')">🔍 Esplora</button>
+            <button class="tab-btn" onclick="switchTab('add')">➕ Aggiungi Fumetto</button>
+            <button class="tab-btn" onclick="switchTab('sell')">🛒 Vendi</button>
+            <button class="tab-btn" onclick="switchTab('stats')">📊 Statistiche</button>
+        </div>
+
+        <!-- EXPLORE TAB -->
+        <div id="explore" class="tab-content active">
+            <div class="main-grid">
+                <div class="card">
+                    <h2>🔎 Ricerca Fumetti</h2>
+                    <div class="form-group">
+                        <label for="searchTitle">Titolo:</label>
+                        <input type="text" id="searchTitle" placeholder="Es: Spider-Man">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="searchComic()">Cerca</button>
+                        <button class="btn-secondary" onclick="loadAllComics()">Mostra Tutti</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📦 Informazioni Negozio</h2>
+                    <div class="stats-box">
+                        <div class="label">Fumetti in Stock</div>
+                        <div class="number" id="totalComics">0</div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="label">Valore Totale</div>
+                        <div class="number" id="totalValue">€0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="comicsContainer" class="comics-grid"></div>
+        </div>
+
+        <!-- ADD TAB -->
+        <div id="add" class="tab-content">
+            <div class="card">
+                <h2>➕ Aggiungi Nuovo Fumetto</h2>
+                <div class="form-group">
+                    <label for="newTitle">Titolo:</label>
+                    <input type="text" id="newTitle" placeholder="Titolo del fumetto" required>
+                </div>
+                <div class="form-group">
+                    <label for="newAuthor">Autore:</label>
+                    <input type="text" id="newAuthor" placeholder="Nome dell'autore" required>
+                </div>
+                <div class="form-group">
+                    <label for="newGenre">Genere:</label>
+                    <input type="text" id="newGenre" placeholder="Es: Supereroi, Azione, Romanzo" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPrice">Prezzo (€):</label>
+                    <input type="number" id="newPrice" step="0.01" placeholder="9.99" required>
+                </div>
+                <button class="btn-primary" onclick="addComic()" style="width: 100%; padding: 15px;">
+                    ✨ Aggiungi Fumetto
+                </button>
+            </div>
+        </div>
+
+        <!-- SELL TAB -->
+        <div id="sell" class="tab-content">
+            <div class="main-grid">
+                <div class="card">
+                    <h2>🛒 Vendi Fumetto</h2>
+                    <div class="form-group">
+                        <label for="sellId">ID Fumetto:</label>
+                        <input type="number" id="sellId" placeholder="ID del fumetto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellQuantity">Quantità:</label>
+                        <input type="number" id="sellQuantity" min="1" value="1" required>
+                    </div>
+                    <button class="btn-success" onclick="sellComic()" style="width: 100%; padding: 12px;">
+                        💰 Vendi
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h2>📥 Rifornisci Stock</h2>
+                    <div class="form-group">
+                        <label for="stockId">ID Fumetto:</label>
+                        <input type="number" id="stockId" placeholder="ID del fumetto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stockQuantity">Quantità:</label>
+                        <input type="number" id="stockQuantity" min="1" value="1" required>
+                    </div>
+                    <button class="btn-primary" onclick="stockComic()" style="width: 100%; padding: 12px;">
+                        📦 Rifornisci
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATS TAB -->
+        <div id="stats" class="tab-content">
+            <div class="main-grid">
+                <div class="card">
+                    <h2>📊 Statistiche Negozio</h2>
+                    <p style="color: #666; margin-bottom: 20px;">Caricamento statistiche...</p>
+                    <div class="stats-box">
+                        <div class="label">Fumetti Totali</div>
+                        <div class="number" id="statsTotal">-</div>
+                    </div>
+                    <div class="stats-box" style="margin-top: 10px;">
+                        <div class="label">Valore Inventario</div>
+                        <div class="number" id="statsValue">-</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>💡 Info Utili</h2>
+                    <ul style="list-style: none; line-height: 2;">
+                        <li>✅ API REST disponibile su /comics</li>
+                        <li>🔗 POST /comics - Aggiungi fumetto</li>
+                        <li>🔗 GET /comics/search?title=... - Ricerca</li>
+                        <li>🔗 PATCH /{id}/sell - Vendi</li>
+                        <li>🔗 PATCH /{id}/stock - Rifornisci</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/comics';
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load stats if switching to stats tab
+            if (tabName === 'stats') {
+                loadStats();
+            } else if (tabName === 'explore') {
+                loadAllComics();
+            }
+        }
+
+        function showAlert(message, type = 'info') {
+            const alertsDiv = document.getElementById('alerts');
+            const alertEl = document.createElement('div');
+            alertEl.className = `alert alert-${type}`;
+            alertEl.textContent = message;
+            alertsDiv.appendChild(alertEl);
+            setTimeout(() => alertEl.remove(), 4000);
+        }
+
+        async function loadAllComics() {
+            try {
+                const response = await fetch(API_BASE);
+                if (!response.ok) throw new Error('Errore nel caricamento');
+                
+                const comics = await response.json();
+                displayComics(comics);
+
+                // Update stats
+                let totalValue = 0;
+                comics.forEach(c => totalValue += (c.price || 0) * (c.quantity || 0));
+                document.getElementById('totalComics').textContent = comics.length;
+                document.getElementById('totalValue').textContent = '€' + totalValue.toFixed(2);
+            } catch (error) {
+                showAlert('❌ Errore nel caricamento dei fumetti: ' + error.message, 'error');
+            }
+        }
+
+        async function searchComic() {
+            const title = document.getElementById('searchTitle').value.trim();
+            if (!title) {
+                showAlert('⚠️ Inserisci un titolo', 'info');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/search?title=${encodeURIComponent(title)}`);
+                if (response.status === 404) {
+                    showAlert('❌ Fumetto non trovato', 'error');
+                    document.getElementById('comicsContainer').innerHTML = '';
+                    return;
+                }
+                if (!response.ok) throw new Error('Errore nella ricerca');
+
+                const comic = await response.json();
+                displayComics([comic]);
+                showAlert('✅ Fumetto trovato!', 'success');
+            } catch (error) {
+                showAlert('❌ Errore nella ricerca: ' + error.message, 'error');
+            }
+        }
+
+        function displayComics(comics) {
+            const container = document.getElementById('comicsContainer');
+            
+            if (comics.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: white;">Nessun fumetto disponibile</p>';
+                return;
+            }
+
+            container.innerHTML = comics.map(comic => `
+                <div class="comic-item">
+                    <div class="comic-cover">📘 ${comic.title}</div>
+                    <div class="comic-info">
+                        <div class="comic-title">${comic.title}</div>
+                        <div class="comic-author">👤 ${comic.author || 'N/A'}</div>
+                        <span class="comic-genre">${comic.genre || 'Generico'}</span>
+                        <div class="comic-price">€${(comic.price || 0).toFixed(2)}</div>
+                        <div class="comic-quantity">📦 Quantità: ${comic.quantity || 0}</div>
+                        <div class="comic-actions">
+                            <button class="btn-success" onclick="quickSell(${comic.id})">Vendi</button>
+                            <button class="btn-primary" onclick="quickStock(${comic.id})">Stock</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function addComic() {
+            const title = document.getElementById('newTitle').value.trim();
+            const author = document.getElementById('newAuthor').value.trim();
+            const genre = document.getElementById('newGenre').value.trim();
+            const price = parseFloat(document.getElementById('newPrice').value);
+
+            if (!title || !author || !genre || !price) {
+                showAlert('⚠️ Compila tutti i campi', 'info');
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, author, genre, price })
+                });
+
+                if (!response.ok) throw new Error('Errore nell\'aggiunta');
+
+                const comic = await response.json();
+                showAlert(`✅ Fumetto "${comic.title}" aggiunto con successo!`, 'success');
+                
+                // Clear form
+                document.getElementById('newTitle').value = '';
+                document.getElementById('newAuthor').value = '';
+                document.getElementById('newGenre').value = '';
+                document.getElementById('newPrice').value = '';
+                
+                loadAllComics();
+            } catch (error) {
+                showAlert('❌ Errore: ' + error.message, 'error');
+            }
+        }
+
+        async function sellComic() {
+            const id = parseInt(document.getElementById('sellId').value);
+            const quantity = parseInt(document.getElementById('sellQuantity').value);
+
+            if (!id || !quantity || quantity < 1) {
+                showAlert('⚠️ Inserisci ID e quantità validi', 'info');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/${id}/sell?quantity=${quantity}`, {
+                    method: 'PATCH'
+                });
+
+                if (!response.ok) throw new Error('Errore nella vendita');
+
+                const comic = await response.json();
+                showAlert(`✅ Venduti ${quantity} copie di "${comic.title}"!`, 'success');
+                document.getElementById('sellId').value = '';
+                document.getElementById('sellQuantity').value = '1';
+                loadAllComics();
+            } catch (error) {
+                showAlert('❌ Errore: ' + error.message, 'error');
+            }
+        }
+
+        async function stockComic() {
+            const id = parseInt(document.getElementById('stockId').value);
+            const quantity = parseInt(document.getElementById('stockQuantity').value);
+
+            if (!id || !quantity || quantity < 1) {
+                showAlert('⚠️ Inserisci ID e quantità validi', 'info');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/${id}/stock?quantity=${quantity}`, {
+                    method: 'PATCH'
+                });
+
+                if (!response.ok) throw new Error('Errore nel rifornimento');
+
+                const comic = await response.json();
+                showAlert(`✅ ${quantity} copie aggiunte a "${comic.title}"!`, 'success');
+                document.getElementById('stockId').value = '';
+                document.getElementById('stockQuantity').value = '1';
+                loadAllComics();
+            } catch (error) {
+                showAlert('❌ Errore: ' + error.message, 'error');
+            }
+        }
+
+        async function quickSell(id) {
+            const quantity = prompt('Quantità da vendere:', '1');
+            if (quantity !== null) {
+                try {
+                    const response = await fetch(`${API_BASE}/${id}/sell?quantity=${quantity}`, {
+                        method: 'PATCH'
+                    });
+                    if (response.ok) {
+                        showAlert('✅ Vendita registrata!', 'success');
+                        loadAllComics();
+                    }
+                } catch (error) {
+                    showAlert('❌ Errore: ' + error.message, 'error');
+                }
+            }
+        }
+
+        async function quickStock(id) {
+            const quantity = prompt('Quantità da aggiungere:', '1');
+            if (quantity !== null) {
+                try {
+                    const response = await fetch(`${API_BASE}/${id}/stock?quantity=${quantity}`, {
+                        method: 'PATCH'
+                    });
+                    if (response.ok) {
+                        showAlert('✅ Stock aggiornato!', 'success');
+                        loadAllComics();
+                    }
+                } catch (error) {
+                    showAlert('❌ Errore: ' + error.message, 'error');
+                }
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch(API_BASE);
+                const comics = await response.json();
+                
+                let totalValue = 0;
+                comics.forEach(c => totalValue += (c.price || 0) * (c.quantity || 0));
+
+                document.getElementById('statsTotal').textContent = comics.length;
+                document.getElementById('statsValue').textContent = '€' + totalValue.toFixed(2);
+            } catch (error) {
+                showAlert('❌ Errore nel caricamento statistiche', 'error');
+            }
+        }
+
+        // Load comics on page load
+        window.addEventListener('load', () => {
+            loadAllComics();
+        });
+    </script>
+</body>
+</html>

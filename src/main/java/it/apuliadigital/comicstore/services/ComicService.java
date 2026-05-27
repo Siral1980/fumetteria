@@ -1,16 +1,19 @@
 package it.apuliadigital.comicstore.services;
 
-import it.apuliadigital.comicstore.models.Comic;
-import it.apuliadigital.comicstore.models.Sell;
-import it.apuliadigital.comicstore.repositories.ComicRepository;
-import it.apuliadigital.comicstore.repositories.SellRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import it.apuliadigital.comicstore.exceptions.ComicNotFoundException;
+import it.apuliadigital.comicstore.exceptions.InsufficientStockException;
+import it.apuliadigital.comicstore.models.Comic;
+import it.apuliadigital.comicstore.models.Sell;
+import it.apuliadigital.comicstore.repositories.ComicRepository;
+import it.apuliadigital.comicstore.repositories.SellRepository;
 
 @Service
 public class ComicService {
@@ -32,16 +35,16 @@ public class ComicService {
 
     public Comic stockComic(Long id, int quantity) {
         Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comic non trovato"));
+                .orElseThrow(() -> new ComicNotFoundException("Comic non trovato"));
         comic.setQuantity(comic.getQuantity() + quantity);
         return comicRepository.save(comic);
     }
 
     public Comic sellComic(Long id, int quantity) {
         Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comic non trovato"));
+                .orElseThrow(() -> new ComicNotFoundException("Comic non trovato"));
         if (comic.getQuantity() < quantity) {
-            throw new RuntimeException("Copie disponibili insufficienti");
+            throw new InsufficientStockException("Copie disponibili insufficienti");
         }
         comic.setQuantity(comic.getQuantity() - quantity);
         return comicRepository.save(comic);
@@ -49,9 +52,9 @@ public class ComicService {
 
     public Sell sellComicWithSell(Long id, int quantity) {
         Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comic non trovato"));
+                .orElseThrow(() -> new ComicNotFoundException("Comic non trovato"));
         if (comic.getQuantity() < quantity) {
-            throw new RuntimeException("Copie disponibili insufficienti");
+            throw new InsufficientStockException("Copie disponibili insufficienti");
         }
         comic.setQuantity(comic.getQuantity() - quantity);
         comicRepository.save(comic);
@@ -66,7 +69,7 @@ public class ComicService {
 
     public Comic updateComic(Long id, Comic updatedComic) {
         Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Comic non trovato"));
+                .orElseThrow(() -> new ComicNotFoundException("Comic non trovato"));
         comic.setTitle(updatedComic.getTitle());
         comic.setAuthor(updatedComic.getAuthor());
         comic.setPrice(updatedComic.getPrice());
