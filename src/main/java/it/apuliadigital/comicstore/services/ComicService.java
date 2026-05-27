@@ -29,6 +29,11 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
+// GET ALL COMICS
+public List<Comic> getAllComics() {
+    return comicRepository.findAll();
+}
+
     public Optional<Comic> findByTitle(String title) {
         return comicRepository.findByTitle(title);
     }

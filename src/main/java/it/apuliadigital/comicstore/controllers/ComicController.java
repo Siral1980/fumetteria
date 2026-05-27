@@ -27,13 +27,12 @@ public class ComicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // FIND COMIC BY TITLE
-    @GetMapping("/search")
-    public ResponseEntity<Comic> findByTitle(@RequestParam String title) {
-        Optional<Comic> comic = comicService.findByTitle(title);
-        return comic.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+  // GET ALL COMICS
+@GetMapping
+public ResponseEntity<List<Comic>> getAllComics() {
+    List<Comic> comics = comicService.getAllComics();
+    return ResponseEntity.ok(comics);
+}
 
     // STOCK COMIC
     @PatchMapping("/{id}/stock")
