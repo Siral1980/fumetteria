@@ -3,8 +3,11 @@ package it.apuliadigital.comicstore.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Entity
-@Table(name = "comic")
+@Table(name = "comics")
 @Data
 public class Comic {
 
@@ -16,11 +19,13 @@ public class Comic {
     private String title;
 
     private String author;
+    private String publisher;
+    private Integer year;
+    private BigDecimal price;
 
-    private Double price;
+    @Column(nullable = false)
+    private Integer quantity = 0;
 
-    private String genre;
-
-    private int quantity;
-
+    @OneToMany(mappedBy = "comic", cascade = CascadeType.ALL)
+    private List<Sell> sells;
 }
