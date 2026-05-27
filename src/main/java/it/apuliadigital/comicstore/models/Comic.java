@@ -2,6 +2,7 @@ package it.apuliadigital.comicstore.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Table(name = "comic")
@@ -20,7 +21,7 @@ public class Comic {
     private Double price;
 
     private String genre;
-
+    
     private int quantity;
 
 }
