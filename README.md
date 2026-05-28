@@ -1,6 +1,6 @@
 ﻿## 🚀 Esercizi Richiesti (Task degli Studenti)
 
-Il progetto base contiene la struttura per la gestione di una fumetteria.  
+Il progetto base, che si trova al seguente indirizzo https://github.com/Siral1980/fumetteria, contiene la struttura per la gestione di una fumetteria
 
 Nella cartella Resources è presente un file data.sql che genererà automaticamente i dati iniziali nel vostro database.
 
@@ -36,10 +36,13 @@ Eseguire i task descritti qui di seguito
     b. Superiore ad un determinato importo
     
 
-Tutti i suddetti metodi devono essere comprensivi di service e controller. Nel caso riusciate creare anche un GeneralExceptionHandler e abilitare Swagger per l'interfaccia grafica.  
+Tutti i suddetti metodi devono essere comprensivi di service e controller. 
 
 
 ## 🛠️ Note per la valutazione
 * Verrà valutata la corretta separazione delle responsabilità nei livelli dell'architettura (Controller -> Service -> Repository).
 * L'uso corretto dei codici di stato HTTP (es. `201 Created` per le creazioni, `400 Bad Request` per dati non validi, `404 Not Found` se una risorsa non esiste).
 * La pulizia del codice e il rispetto delle convenzioni di naming di Java/Spring.
+* La creazione di un GeneralExceptionHandler è gradito
+
+Il progetto, oltre ad essere pushato sul vostro branch nel repository, dovrà essere compresso in un file.zip e caricato sul drive della scuola al seguente indirizzo https://drive.google.com/drive/folders/1K1wjzjyUM9oIlX_G3kRqdck2qViwtDou?usp=drive_link
