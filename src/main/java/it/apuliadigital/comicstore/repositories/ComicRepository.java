@@ -22,5 +22,5 @@ public interface ComicRepository  extends JpaRepository<Comic, Integer> {
         String titleKeyword, String authorKeyword
     );
 
-    
+    List<Comic> findByOutOfStockTrue(boolean outOfStock);
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.apuliadigital.comicstore.ComicTitleDto;
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.services.ComicService;
 
@@ -65,6 +66,12 @@ public class ComicController {
     public ResponseEntity<List<Comic>> outOfStockToggle() {
         List<Comic> updatedComics = comicService.outOfStockToggle();
         return ResponseEntity.ok(updatedComics);
+    }
+
+@GetMapping("/findLowStock")
+    public ResponseEntity<List<ComicTitleDto>> findLowStock() {
+        List<ComicTitleDto> titles = comicService.findLowStock();
+        return ResponseEntity.ok(titles);
     }
 }
 

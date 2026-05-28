@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.apuliadigital.comicstore.ComicTitleDto;
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.repositories.ComicRepository;
 
@@ -84,5 +85,11 @@ public List<Comic>  outOfStockToggle() {
         }
     });
     return comicRepository.saveAll(allComics);
+    }
+    public List<ComicTitleDto> findLowStock(){
+        List<Comic> outOfStockComics = comicRepository.findByOutOfStockTrue(true);
+        return outOfStockComics.stream()
+                .map(comic -> new ComicTitleDto(comic.getTitle()))
+                .toList();
     }
  }
