@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +20,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.services.ComicService;
+import it.apuliadigital.comicstore.services.SellService;
 
 @RestController
 @RequestMapping("/comics")
 public class ComicController {
      @Autowired
     private ComicService comicService;
+    @Autowired
+    private SellService sellService;
 
     @PostMapping("/addComic")
     public ResponseEntity<Comic> createComic(@RequestParam String title,
@@ -57,7 +60,7 @@ public class ComicController {
     
     @PutMapping("/sellComic")
     public ResponseEntity<Sell> sellComic(@RequestParam String title, @RequestParam int quantity) {
-        Sell sell = comicService.sellComic(title, quantity);
+        Sell sell = sellService.sellComic(title, quantity);
         return ResponseEntity.ok(sell);
     }
 
@@ -71,14 +74,14 @@ public class ComicController {
     public ResponseEntity<List<Sell>> getSalesByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
-        List<Sell> sales = comicService.findSalesByDateRange(start, end);
+        List<Sell> sales = sellService.findSalesByDateRange(start, end);
         return ResponseEntity.ok(sales);
     }
 
     @GetMapping("/sales/byAmount")
     public ResponseEntity<List<Sell>> getSalesByAmount(
             @RequestParam BigDecimal amount) {
-        List<Sell> sales = comicService.findSalesByAmountGreaterThan(amount);
+        List<Sell> sales = sellService.findSalesByAmountGreaterThan(amount);
         return ResponseEntity.ok(sales);
     }
 
