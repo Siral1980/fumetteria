@@ -14,7 +14,9 @@ import java.util.Optional;
 public class ComicService {
     @Autowired
     public ComicRepository comicRepository;
+    @Autowired
     public SellService sellService;
+
 
 
     public Comic addComic(Comic c){

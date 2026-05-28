@@ -12,12 +12,9 @@ import java.util.Optional;
 @Service
 public class SellService {
     @Autowired
-    public ComicService comicService;
     public SellRepository sellRepository;
 
-    public SellService(SellRepository sellRepository) {
-        this.sellRepository = sellRepository;
-    }
+
 
     public Sell sellComicWithSell(Comic c){
         Sell s = new Sell();
