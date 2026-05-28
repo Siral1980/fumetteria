@@ -125,9 +125,9 @@ public Comic updateComic(
         List<Comic> comics = comicRepository.findAll();
         for (Comic comic : comics) {
             if (comic.getQuantity() > 0) {
-                comic.setOutOfStock(true);
-            } else {
                 comic.setOutOfStock(false);
+            } else {
+                comic.setOutOfStock(true);
             }
         }
         return comicRepository.saveAll(comics);
