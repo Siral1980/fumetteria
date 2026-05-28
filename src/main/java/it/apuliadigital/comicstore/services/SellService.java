@@ -21,9 +21,7 @@ public class SellService {
     private ComicRepository comicRepository;
 
     // ========================================================================
-    // BONUS TASK 11: Sell Comic History
-    // Crea un record in Sell indicando: fumetto venduto, quantità venduta,
-    // data e orario, e prezzo totale della vendita.
+    // Sell Comic History
     // ========================================================================
     public Sell sellComicHistory(Long comicId, int quantity) {
         if (quantity <= 0) {
@@ -37,11 +35,11 @@ public class SellService {
             throw new IllegalArgumentException("Copie disponibili insufficienti. Disponibili: " + comic.getQuantity());
         }
 
-        // Decrementa la quantità del fumetto
+        // Decrease comic quantity
         comic.setQuantity(comic.getQuantity() - quantity);
         comicRepository.save(comic);
 
-        // Crea il record di vendita
+        // Create sell record
         Sell sell = new Sell();
         sell.setComic(comic);
         sell.setSellingQuantity(quantity);
@@ -52,14 +50,14 @@ public class SellService {
     }
 
     // ========================================================================
-    // BONUS TASK 11a: Ricerca vendite in un range di date
+    // Find sales in a date range
     // ========================================================================
     public List<Sell> findByDateRange(LocalDateTime from, LocalDateTime to) {
         return sellRepository.findBySellingDateBetween(from, to);
     }
 
     // ========================================================================
-    // BONUS TASK 11b: Ricerca vendite superiore ad un determinato importo
+    // Find sales greater than amount
     // ========================================================================
     public List<Sell> findByAmountGreaterThan(BigDecimal amount) {
         return sellRepository.findByTotalAmountGreaterThan(amount);

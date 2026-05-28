@@ -14,8 +14,7 @@ public class ComicService {
     private ComicRepository comicRepository;
 
     // ========================================================================
-    // TASK 3: Add Comic
-    // N.B. Il fumetto deve essere creato con 0 di default nel campo quantity
+    // Add Comic
     // ========================================================================
     public Comic addComic(Comic comic) {
         comic.setQuantity(0);
@@ -24,8 +23,7 @@ public class ComicService {
     }
 
     // ========================================================================
-    // TASK 4: Find Comic
-    // N.B. Ricerca tramite il titolo
+    // Find Comic
     // ========================================================================
     public Comic findByTitle(String title) {
         return comicRepository.findByTitle(title)
@@ -33,8 +31,7 @@ public class ComicService {
     }
 
     // ========================================================================
-    // TASK 5: Stock Comic
-    // Aggiunta in magazzino del fumetto
+    // Stock Comic
     // ========================================================================
     public Comic stockComic(Long id, int quantity) {
         if (quantity <= 0) {
@@ -46,60 +43,51 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
-    // ========================================================================
-    // TASK 6: Sell Comic
-    // Vendita del fumetto controllando prima la disponibilità
-    // ========================================================================
-    public Comic sellComic(Long id, int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("La quantità da vendere deve essere maggiore di 0");
-        }
-        Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + id));
-        if (comic.getQuantity() < quantity) {
-            throw new IllegalArgumentException("Copie disponibili insufficienti. Disponibili: " + comic.getQuantity());
-        }
-        comic.setQuantity(comic.getQuantity() - quantity);
-        return comicRepository.save(comic);
-    }
+
 
     // ========================================================================
-    // TASK 7: Update Comic
-    // Aggiornamento senza cambiare id o quantità
+    // Update Comic
     // ========================================================================
     public Comic updateComic(Long id, Comic updatedComic) {
         Comic comic = comicRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + id));
-        comic.setTitle(updatedComic.getTitle());
-        comic.setAuthor(updatedComic.getAuthor());
-        comic.setPrice(updatedComic.getPrice());
-        comic.setGenre(updatedComic.getGenre());
+
+        if (updatedComic.getTitle() != null && !updatedComic.getTitle().isEmpty() && !updatedComic.getTitle().equals("string")) {
+            comic.setTitle(updatedComic.getTitle());
+        }
+        if (updatedComic.getAuthor() != null && !updatedComic.getAuthor().isEmpty() && !updatedComic.getAuthor().equals("string")) {
+            comic.setAuthor(updatedComic.getAuthor());
+        }
+        if (updatedComic.getGenre() != null && !updatedComic.getGenre().isEmpty() && !updatedComic.getGenre().equals("string")) {
+            comic.setGenre(updatedComic.getGenre());
+        }
+        if (updatedComic.getPrice() != null && updatedComic.getPrice() != 0 && updatedComic.getPrice() != 0.1) {
+            comic.setPrice(updatedComic.getPrice());
+        }
+
         return comicRepository.save(comic);
     }
 
     // ========================================================================
-    // TASK 8: Find By Filter
-    // Ricerca tramite stringa parziale su autore e titolo
+    // Find By Filter
     // ========================================================================
     public List<Comic> findByFilter(String filter) {
         return comicRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(filter, filter);
     }
 
     // ========================================================================
-    // TASK 9: Out of Stock Toggle
-    // Cicla tutto il database e fa "toggle" sul campo outOfStock
+    // Out of Stock Toggle
     // ========================================================================
-    public void toggleOutOfStock() {
+    public List<Comic> toggleOutOfStock() {
         List<Comic> comics = comicRepository.findAll();
         for (Comic comic : comics) {
             comic.setOutOfStock(comic.getQuantity() <= 0);
         }
-        comicRepository.saveAll(comics);
+        return comicRepository.saveAll(comics);
     }
 
     // ========================================================================
-    // TASK 10: Find Low Stock
-    // Ricerca tutti i fumetti "out of stock", ritorna solo i titoli
+    // Find Low Stock
     // ========================================================================
     public List<String> findLowStock() {
         List<Comic> comics = comicRepository.findByOutOfStockTrue();
