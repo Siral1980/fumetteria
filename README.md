@@ -17,6 +17,7 @@ Eseguire i task descritti qui di seguito
 8. **Out of Stock Toogle:** aggiungere un campo boolean al model di Comic dal nome outOfStock, con impostazione base true (quando viene creato un nuovo fumetto, la sua quantità è 0, quindi ha senso che questa impostazione sia settata a true). Implementare un metodo che cicli tutto il vostro database e faccia un'operazione di "toogle" sul campo outOfStock basandosi sulla quantità. Se è maggiore di 0 va settato a false.
 9. **Find Low Stock:** implementare un metodo che permetta la ricerca di tutti i fumetti "out of stock". La lista deve contenere solo i nomi dei fumetti e nessun altro dato.
 10. **BONUS TASK** - **Sell Comic History:** nel model e repository trovate i componenti relativi alla vendita dei fumetti. Implementare un metodo **sellComicHistory** che crei un record nell'entity **Sell** in cui vengono indicati:
+    
     a. Fumetto venduto
     b. Quantità venduta
     c. Data e orario della vendita
@@ -24,6 +25,8 @@ Eseguire i task descritti qui di seguito
     Implementare anche due metodi nel SellService che permettano di cercare una vendita:
     a. In un range di date
     b. Superiore ad un determinato importo
+
+Tutti i suddetti metodi devono essere comprensivi di service e controller. Nel caso riusciate creare anche un GeneralExceptionHandler e abilitare Swagger per l'interfaccia grafica.
 
 ## 🛠️ Note per la valutazione
 * Verrà valutata la corretta separazione delle responsabilità nei livelli dell'architettura (Controller -> Service -> Repository).
