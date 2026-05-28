@@ -3,11 +3,8 @@ package it.apuliadigital.comicstore.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 @Entity
-@Table(name = "comics")
+@Table(name = "comic")
 @Data
 public class Comic {
 
@@ -19,13 +16,13 @@ public class Comic {
     private String title;
 
     private String author;
-    private String publisher;
-    private Integer year;
-    private BigDecimal price;
 
-    @Column(nullable = false)
-    private Integer quantity = 0;
+    private Double price;
 
-    @OneToMany(mappedBy = "comic", cascade = CascadeType.ALL)
-    private List<Sell> sells;
+    private String genre;
+
+    private int quantity;
+
+    // Task 9: default true perché ogni nuovo fumetto parte con quantity = 0
+    private boolean outOfStock = true;
 }
