@@ -42,5 +42,6 @@ public class SellController {
         List<Sell> sells = comicService.findSalesByAmountGreaterThan(BigDecimal.valueOf(amount));
         return ResponseEntity.ok(sells);
     }
+    
 }
 

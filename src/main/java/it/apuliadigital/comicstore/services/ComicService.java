@@ -112,4 +112,32 @@ public Comic updateComic(
         return comicRepository.save(comic);
     }
 
+    public List<Comic> searchComics(String authorAndTitle) {
+        return comicRepository.findByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(authorAndTitle, authorAndTitle)
+                .orElseThrow(() -> new IllegalArgumentException("Nessun fumetto trovato con autore contenente: " + authorAndTitle + " e titolo contenente: " + authorAndTitle));
+    }
+
+    public List<Comic> getAllComics() {
+        return comicRepository.findAll();
+    }
+
+    public List<Comic> toggleComicsOutOfStockStatus() {
+        List<Comic> comics = comicRepository.findAll();
+        for (Comic comic : comics) {
+            if (comic.getQuantity() > 0) {
+                comic.setOutOfStock(true);
+            } else {
+                comic.setOutOfStock(false);
+            }
+        }
+        return comicRepository.saveAll(comics);
+    }
+
+    public List<Comic> getComicsOutOfStock() {
+        List<Comic> comics = comicRepository.findAll();
+        return comics.stream()
+                .filter(Comic::isOutOfStock)
+                .toList();
+    }
+
 }
