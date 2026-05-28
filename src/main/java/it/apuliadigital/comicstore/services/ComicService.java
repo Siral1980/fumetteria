@@ -2,6 +2,7 @@ package it.apuliadigital.comicstore.services;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import it.apuliadigital.comicstore.ComicTitleDto;
 import it.apuliadigital.comicstore.models.Comic;
+import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.repositories.ComicRepository;
+import it.apuliadigital.comicstore.repositories.SellRepository;
 
 @Service
 public class ComicService {
 
     @Autowired
     private ComicRepository comicRepository;
+
+    @Autowired
+    private SellRepository sellRepository;
 
     public Comic addComic(Comic comic) {
         try{
@@ -63,7 +69,16 @@ public class ComicService {
         }
 
         comic.setQuantity(comic.getQuantity() - quantity);
-        return comicRepository.save(comic);
+        Comic updatedComic = comicRepository.save(comic);
+
+        Sell sell = Sell.builder()
+                .comic(updatedComic)
+                .quantity(quantity)
+                .saleDate(LocalDateTime.now())
+                .totalPrice(comic.getPrice() * quantity)
+                .build();
+        sellRepository.save(sell);
+        return updatedComic;
     }
     public List<Comic> findByFilter(String keyword) {
         if(keyword == null || keyword.isBlank()){
