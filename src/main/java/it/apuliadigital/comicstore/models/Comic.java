@@ -21,7 +21,9 @@ public class Comic {
     private Double price;
 
     private String genre;
-    
+
     private int quantity;
+
+    private Boolean outOfStock;
 
 }

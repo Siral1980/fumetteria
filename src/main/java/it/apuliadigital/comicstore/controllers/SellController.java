@@ -5,12 +5,15 @@ import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.services.ComicService;
 import it.apuliadigital.comicstore.services.SellService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+// Controller che ci gestisce tutte le request delle vendite di un comic.
 @RestController
 @RequestMapping("/sell")
 public class SellController {
@@ -26,5 +29,12 @@ public class SellController {
     public ResponseEntity<Sell> sellComic(@RequestParam String title,
                                           @RequestParam int quantity){
         return ResponseEntity.ok(comicService.sellComic(title, quantity));
+    }
+
+    @GetMapping("/getSellsByDate")
+    public ResponseEntity<Optional<List<Sell>>> getSellsByDate(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end){
+        return ResponseEntity.ok(sellService.findSellByDate(start, end));
     }
 }

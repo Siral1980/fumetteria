@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +14,7 @@ public class Sell {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDateTime sellingDate;
+    private LocalDate sellingDate;
     private int sellingQuantity;
     private BigDecimal totalAmount; // comicPrice * sellingQuantity
     @ManyToOne
