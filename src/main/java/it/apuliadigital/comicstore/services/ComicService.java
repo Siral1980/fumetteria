@@ -25,8 +25,10 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
+    // CORRETTO: Ora lancia l'eccezione se il titolo non esiste, attivando il 404 automatico
     public Comic findComicByTitle(String title) {
-        return comicRepository.findByTitle(title).orElse(null);
+        return comicRepository.findByTitle(title)
+                .orElseThrow(() -> new RuntimeException("Fumetto non trovato con titolo: " + title));
     }
 
     public Comic stockComic(Long id, int quantityToAdd) {
@@ -34,7 +36,7 @@ public class ComicService {
                 .orElseThrow(() -> new RuntimeException("Fumetto non trovato con ID: " + id));
         
         comic.setQuantity(comic.getQuantity() + quantityToAdd);
-        comic.setOutOfStock(comic.getQuantity() <= 0); // Aggiorna lo stato outOfStock automaticamente
+        comic.setOutOfStock(comic.getQuantity() <= 0); 
         return comicRepository.save(comic);
     }
 
@@ -47,7 +49,7 @@ public class ComicService {
         }
 
         comic.setQuantity(comic.getQuantity() - quantity);
-        comic.setOutOfStock(comic.getQuantity() <= 0); // Aggiorna lo stato outOfStock automaticamente
+        comic.setOutOfStock(comic.getQuantity() <= 0); 
         return comicRepository.save(comic);
     }
 
@@ -63,12 +65,10 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
-    // Task 8: Find By Filter
     public List<Comic> findByFilter(String keyword) {
         return comicRepository.findByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(keyword, keyword);
     }
 
-    // Task 9: Out of Stock Toggle (Cicla tutto il DB e sincronizza basandosi sulla quantità)
     public void toggleOutOfStockStatus() {
         List<Comic> allComics = comicRepository.findAll();
         for (Comic c : allComics) {
@@ -77,7 +77,6 @@ public class ComicService {
         comicRepository.saveAll(allComics);
     }
 
-    // Task 10: Find Low Stock
     public List<String> findLowStockTitles() {
         return comicRepository.findTitlesOfOutOfStockComics();
     }

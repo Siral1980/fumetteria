@@ -20,13 +20,10 @@ public class ComicController {
         return new ResponseEntity<>(comicService.addComic(comic), HttpStatus.CREATED);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<Comic> findComicByTitle(@RequestParam String title) {
-        Comic comic = comicService.findComicByTitle(title);
-        if (comic == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(comic, HttpStatus.OK);
+    // CORRETTO: Pulito, elegante, stile RESTful con PathVariable e gestione delegata all'ExceptionHandler
+    @GetMapping("/title/{title}")
+    public ResponseEntity<Comic> findComicByTitle(@PathVariable String title) {
+        return new ResponseEntity<>(comicService.findComicByTitle(title), HttpStatus.OK);
     }
 
     @PutMapping("/{id}/stock")
@@ -44,20 +41,17 @@ public class ComicController {
         return new ResponseEntity<>(comicService.updateComic(id, comicDetails), HttpStatus.OK);
     }
 
-    // Task 8: Find By Filter
     @GetMapping("/filter")
     public ResponseEntity<List<Comic>> findByFilter(@RequestParam String keyword) {
         return new ResponseEntity<>(comicService.findByFilter(keyword), HttpStatus.OK);
     }
 
-    // Task 9: Out of Stock Toggle
     @PutMapping("/toggle-out-of-stock")
     public ResponseEntity<Void> toggleOutOfStock() {
         comicService.toggleOutOfStockStatus();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // Task 10: Find Low Stock
     @GetMapping("/low-stock")
     public ResponseEntity<List<String>> getLowStockTitles() {
         return new ResponseEntity<>(comicService.findLowStockTitles(), HttpStatus.OK);

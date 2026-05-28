@@ -29,7 +29,9 @@ public class SellController {
         return new ResponseEntity<>(comicService.findSalesInDateRange(start, end), HttpStatus.OK);
     }
 
+    // CORRETTO: Rimosso il vecchio 'return null' e collegato al service
     @GetMapping("/amount")
     public ResponseEntity<List<Sell>> getSalesGreaterThan(@RequestParam double minAmount) {
+        return new ResponseEntity<>(comicService.findSalesWithPriceGreaterThan(minAmount), HttpStatus.OK);
     }
 }
