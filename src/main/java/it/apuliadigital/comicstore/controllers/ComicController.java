@@ -60,6 +60,12 @@ public class ComicController {
         List<Comic> results = comicService.findByFilter(keyword);
         return ResponseEntity.ok(results);
     }  
+
+    @PutMapping("/outOfStockToggle")
+    public ResponseEntity<List<Comic>> outOfStockToggle() {
+        List<Comic> updatedComics = comicService.outOfStockToggle();
+        return ResponseEntity.ok(updatedComics);
+    }
 }
 
 

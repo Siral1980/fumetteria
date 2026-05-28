@@ -14,13 +14,11 @@ public class Comic {
 
     @Column(nullable = false, unique = true)
     private String title;
-
     private String author;
-
     private Double price;
-
     private String genre;
-
     private int quantity;
 
+    @Column(name = "out_of_stock", columnDefinition =  "boolean default true")
+    private boolean outOfStock;
 }

@@ -74,4 +74,15 @@ public class ComicService {
             cleanedKeyword
         );
     }
+public List<Comic>  outOfStockToggle() {
+    List<Comic> allComics = comicRepository.findAll();
+    allComics.forEach(comic -> {
+        if (comic.getQuantity() > 0) {
+            comic.setOutOfStock(false);
+        } else {
+            comic.setOutOfStock(true);
+        }
+    });
+    return comicRepository.saveAll(allComics);
+    }
  }
