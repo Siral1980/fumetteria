@@ -29,6 +29,7 @@ public class ComicService {
        throw new IllegalArgumentException("Il fumetto con lo stesso titolo, autore, genere, prezzo e quantità esiste già.");
       }
       comic.setQuantity(0);
+      comic.setOutOfStock(true);
       return comicRepository.save(comic);
      } catch (IllegalArgumentException e) {
       System.err.println("Errore: " + e.getMessage());
