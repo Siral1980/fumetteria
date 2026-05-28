@@ -1,4 +1,4 @@
--- TRUNCATE TABLE comic RESTART IDENTITY CASCADE;
+TRUNCATE TABLE comic RESTART IDENTITY CASCADE;
 
 INSERT INTO comic (title, author, price, genre, quantity) VALUES
 -- Genere: Manga
