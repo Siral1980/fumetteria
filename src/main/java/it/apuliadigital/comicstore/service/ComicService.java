@@ -17,7 +17,7 @@ import java.util.List;
 // @RequiredArgsConstructor di lombok crea il costruttore con i campi final (injection)
 @Service
 @RequiredArgsConstructor
-@Slf4j  // per i log, più comodo di System.out.println
+@Slf4j  
 public class ComicService {
 
     private final ComicRepository comicRepository;
