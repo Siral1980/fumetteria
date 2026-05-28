@@ -1,6 +1,8 @@
 package it.apuliadigital.comicstore.services;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,4 +77,14 @@ public Comic updateComic(
         return comicRepository.save(comic);
     }
 
+    public List<Comic> searchComics(String authorAndTitle) {
+        return comicRepository.findByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(authorAndTitle, authorAndTitle)
+                .orElseThrow(() -> new IllegalArgumentException("Nessun fumetto trovato con autore: " + authorAndTitle + " o titolo: " + authorAndTitle));
+    }
+
+    public List<Comic> getAllComics() {
+        return comicRepository.findAll();
+    }
+
+   
 }

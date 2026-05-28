@@ -85,4 +85,10 @@ public class ComicController {
         return ResponseEntity.ok(sales);
     }
 
+    @GetMapping("/searchByAuthorAndTitle")
+    public ResponseEntity<List<Comic>> searchComics(@RequestParam String authorandTitle) {
+        List<Comic> comics = comicService.searchComics(authorandTitle);
+        return ResponseEntity.ok(comics);
+    }
+
 }

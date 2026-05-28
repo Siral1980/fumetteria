@@ -1,5 +1,6 @@
 package it.apuliadigital.comicstore.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,8 @@ public interface ComicRepository extends JpaRepository<Comic, Long> {
 
     Optional<Comic> findByTitleIgnoreCase(String title);
 
+    Optional<List<Comic>> findByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(String author, String title);
+
+    
     
 }
