@@ -10,4 +10,5 @@ public class ComicStoreApplication {
 		SpringApplication.run(ComicStoreApplication.class, args);
 	}
 
+
 }
