@@ -16,7 +16,7 @@ Eseguire i task descritti qui di seguito
 7. **Find By Filter:** implementare un metodo che permetta la ricerca tramite una stringa, anche parziale, sui campi autore e titolo. Deve poter restituire 0 o pìù elementi.
 8. **Out of Stock Toogle:** aggiungere un campo boolean al model di Comic dal nome outOfStock, con impostazione base true (quando viene creato un nuovo fumetto, la sua quantità è 0, quindi ha senso che questa impostazione sia settata a true). Implementare un metodo che cicli tutto il vostro database e faccia un'operazione di "toogle" sul campo outOfStock basandosi sulla quantità. Se è maggiore di 0 va settato a false.
 9. **Find Low Stock:** implementare un metodo che permetta la ricerca di tutti i fumetti "out of stock". La lista deve contenere solo i nomi dei fumetti e nessun altro dato.
-10. **BONUS TASK** **Sell Comic History:** nel model e repository trovate i componenti relativi alla vendita dei fumetti. Implementare un metodo **sellComicHistory** che crei un record nell'entity **Sell** in cui vengono indicati:
+10. **BONUS TASK** - **Sell Comic History:** nel model e repository trovate i componenti relativi alla vendita dei fumetti. Implementare un metodo **sellComicHistory** che crei un record nell'entity **Sell** in cui vengono indicati:
     a. Fumetto venduto
     b. Quantità venduta
     c. Data e orario della vendita
