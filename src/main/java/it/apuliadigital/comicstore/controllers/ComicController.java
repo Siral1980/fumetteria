@@ -39,10 +39,18 @@ public class ComicController {
         return ResponseEntity.ok(comicService.addComic(c));
     }
     //Metodo post per aggiungere quantità ad un comic
-    @PostMapping("/stockComic")
+    @PutMapping("/stockComic")
     public ResponseEntity<Optional<Comic>> stockComic(@RequestParam String title,
                                                       @RequestParam int quantity){
         return ResponseEntity.ok(comicService.stockComic(title, quantity));
+    }
+
+    @PutMapping("/updateComic")
+    public ResponseEntity<Optional<Comic>> updateComic(@RequestParam String title,
+                                                       @RequestParam(required = false) String price,
+                                                       @RequestParam(required = false) String author,
+                                                       @RequestParam(required = false) String genre){
+        return ResponseEntity.ok(comicService.updateComic(title, price, author, genre));
     }
 
     //Metodo get per visualizzare tutti i comics out of stock

@@ -32,6 +32,7 @@ public class ComicService {
             c.setOutOfStock(c.getQuantity() <= 0);
             comicRepository.save(c);
         }
+        System.out.println("Controllo dei fumetti outOfStock completato.");
     }
 
     //Metodo per creare un comic
@@ -49,6 +50,28 @@ public class ComicService {
         c.get().setOutOfStock(false);
         comicRepository.save(c.get());
         return c;
+    }
+
+    public Optional<Comic> updateComic(String title, String price, String author, String genre){
+        double priceInt;
+        Optional<Comic> comic = findByTitle(title);
+        if(comic.isEmpty()) throw new IllegalArgumentException("Errore: Fumetto non trovato.");
+
+        if(price != null && !price.isBlank()){
+            try{
+                priceInt = Double.parseDouble(price);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Errore: Quantità non è un numero");
+            }
+            if(priceInt <= 0) throw new IllegalArgumentException("Errore: Quantità > o = A 0.");
+            comic.get().setPrice(priceInt);
+        }
+
+        if(author != null && !author.isBlank()) comic.get().setAuthor(author);
+        if(genre != null && !genre.isBlank()) comic.get().setGenre(genre);
+        comicRepository.save(comic.get());
+        return comic;
+
     }
 
     //Metodo per vendere un comic, per poi passare a sell service la gestione della vendita.
