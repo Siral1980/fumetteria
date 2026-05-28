@@ -23,4 +23,5 @@ public class Comic {
 
     private int quantity;
 
+    private boolean outOfStock = true;
 }
