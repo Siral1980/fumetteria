@@ -46,3 +46,5 @@ Tutti i suddetti metodi devono essere comprensivi di service e controller.
 * La creazione di un GeneralExceptionHandler è gradito
 
 Il progetto, oltre ad essere pushato sul vostro branch nel repository, dovrà essere compresso in un file.zip e caricato sul drive della scuola al seguente indirizzo https://drive.google.com/drive/folders/1K1wjzjyUM9oIlX_G3kRqdck2qViwtDou?usp=drive_link
+
+ 
