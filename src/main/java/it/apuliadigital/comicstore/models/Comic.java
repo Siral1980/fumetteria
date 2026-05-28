@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "comic")
-@Data
+@Data   //c'è data quindi fa automaticamente
 public class Comic {
 
     @Id
@@ -21,6 +21,8 @@ public class Comic {
 
     private String genre;
 
-    private int quantity;
+    private int quantity = 0 ;
+    @Column(name = "out_of_stock", columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean outOfStock;
 
 }

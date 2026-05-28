@@ -1,0 +1,21 @@
+package it.apuliadigital.comicstore.controllers;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+// Intercetta le eccezioni lanciate da tutti icontroller
+@RestControllerAdvice
+public class GeneralExceptionHandler {
+
+    @ExceptionHandler(RuntimeException.class) // Specifica quale tipo di errore deve catturare questo metodo
+    public ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
+        String message = exception.getMessage(); // Otteniamo il messaggio di errore personalizzato dall'eccezione
+
+        if (message.contains("Fumetto non trovato")) || message.contains("Impossibile trovarlo") || message.contains("Impossibile vendere") {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND); // HTTP 404 (NOT FOUND) se l'errore riguarda un fumetto non trovato o problemi di stock/vendita
+        }
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST); // HTTP 400 (BAD REQUEST) e inseriamo il messaggio di errore personalizzato
+    }
+}
