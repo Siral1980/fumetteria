@@ -1,4 +1,4 @@
-TRUNCATE TABLE comic RESTART IDENTITY CASCADE;
+-- TRUNCATE TABLE comic RESTART IDENTITY CASCADE;
 
 INSERT INTO comic (title, author, price, genre, quantity) VALUES
 -- Genere: Manga
@@ -60,3 +60,5 @@ INSERT INTO comic (title, author, price, genre, quantity) VALUES
 ('Paperone e i dollari di ghiaccio', 'Carl Barks', 8.90, 'Altro', 16),
 ('Topolino e il mistero di Macchia Nera', 'Floyd Gottfredson', 12.00, 'Altro', 11),
 ('Sceriffo Fox: Giustizia a Solitude', 'Giorgio Pezzin', 9.50, 'Altro', 5);
+
+ON CONFLICT (title) DO NOTHING;
