@@ -1,10 +1,10 @@
 ﻿## 🚀 Esercizi Richiesti (Task degli Studenti)
 
-Il progetto base contiene la struttura per la gestione di una fumetteria
+Il progetto base contiene la struttura per la gestione di una fumetteria.
 Nella cartella Resources è presente un file data.sql che genererà automaticamente i dati iniziali nel vostro database.
 
 **Obiettivo:** 
-Creare un branch con il formato nomecognome in cui caricare il proprio codice
+Creare un branch con il formato nomecognome in cui caricare il proprio codice.
 Eseguire i task descritti qui di seguito 
 
 1. **Setup & Fix:** Risolvere tutti i problemi di avvio dell'applicazione. 
@@ -15,20 +15,15 @@ Eseguire i task descritti qui di seguito
 6. **Update Comic:** implementare un metodo che permetta l'aggiornamento del fumetto, senza poter cambiare id o quantità (questo compito va al metodo stock comic o sell comic)
 7. **Find By Filter:** implementare un metodo che permetta la ricerca tramite una stringa, anche parziale, sui campi autore e titolo. Deve poter restituire 0 o pìù elementi.
 8. **Out of Stock Toogle:** aggiungere un campo boolean al model di Comic dal nome outOfStock, con impostazione base true (quando viene creato un nuovo fumetto, la sua quantità è 0, quindi ha senso che questa impostazione sia settata a true). Implementare un metodo che cicli tutto il vostro database e faccia un'operazione di "toogle" sul campo outOfStock basandosi sulla quantità. Se è maggiore di 0 va settato a false.
-9. **Find Low Stock:** implementare un metodo che permetta la ricerca di tutti i fumetti "out of stock". La lista deve contenere solo i nomi dei fumetti e nessun altro dato. 
-
-
-Tutti i suddetti metodi devono essere comprensivi di service e controller. Nel caso riusciate creare anche un GeneralExceptionHandler e abilitare Swagger per l'interfaccia grafica.
-
-**BONUS TASK:** nel model e repository trovate componenti relativi alla vendita dei fumetti. Implementare un metodo sellComicWithSell che crei un record nell'entity **Sell** in cui vengano indicati
-1. Fumetto venduto
-2. Quantità venduta
-3. Data e orario della vendita
-4. Prezzo totale della vendita
-Implementare anche due metodi che ci permettano di cercare una vendita 
-1. In un range di date 
-2. Superiore ad un determinato importo
-
+9. **Find Low Stock:** implementare un metodo che permetta la ricerca di tutti i fumetti "out of stock". La lista deve contenere solo i nomi dei fumetti e nessun altro dato.
+10. **BONUS TASK** **Sell Comic History:** nel model e repository trovate i componenti relativi alla vendita dei fumetti. Implementare un metodo **sellComicHistory** che crei un record nell'entity **Sell** in cui vengono indicati:
+    a. Fumetto venduto
+    b. Quantità venduta
+    c. Data e orario della vendita
+    d. Prezzo totale della vendita
+    Implementare anche due metodi nel SellService che permettano di cercare una vendita:
+    a. In un range di date
+    b. Superiore ad un determinato importo
 
 ## 🛠️ Note per la valutazione
 * Verrà valutata la corretta separazione delle responsabilità nei livelli dell'architettura (Controller -> Service -> Repository).
