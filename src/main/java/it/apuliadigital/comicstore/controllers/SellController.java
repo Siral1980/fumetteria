@@ -6,9 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +24,12 @@ public class SellController {
     @Autowired
     private SellService sellService;
 
-    @PutMapping("/sellComicWithSell")
-    public ResponseEntity<Sell> sellComicWithSell(@RequestParam String title, @RequestParam int quantity) {
+    @PostMapping("/sellComicHistory")
+    public ResponseEntity<Sell> sellComicHistory(@RequestParam String title, @RequestParam int quantity) {
 
-        Sell sell = sellService.sellComicWithSell(title, quantity);
+        Sell sell = sellService.sellComicHistory(title, quantity);
 
-        return ResponseEntity.ok(sell);
+        return ResponseEntity.status(HttpStatus.CREATED).body(sell);
     }
 
     @GetMapping("/findByDateRange")

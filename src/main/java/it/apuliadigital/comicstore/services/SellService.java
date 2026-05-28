@@ -24,7 +24,7 @@ public class SellService {
     private ComicRepository comicRepository;
 
     @Transactional
-    public Sell sellComicWithSell(String title, int quantityToSell) {
+    public Sell sellComicHistory(String title, int quantityToSell) {
 
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException("Il titolo del fumetto è obbligatorio.");
@@ -37,7 +37,7 @@ public class SellService {
         Comic comic = comicRepository.findByTitle(title)
                 .orElseThrow(() -> new NoSuchElementException("Fumetto non trovato."));
 
-        if (comic.getPrice() == null) {
+        if (comic.getPrice() == null || comic.getPrice() < 0) {
             throw new IllegalStateException("Il fumetto non ha un prezzo valido.");
         }
 
@@ -48,6 +48,7 @@ public class SellService {
         }
 
         comic.setQuantity(currentQuantity - quantityToSell);
+        comic.setOutOfStock(comic.getQuantity() <= 0);
         comicRepository.save(comic);
 
         BigDecimal totalAmount = BigDecimal.valueOf(comic.getPrice())

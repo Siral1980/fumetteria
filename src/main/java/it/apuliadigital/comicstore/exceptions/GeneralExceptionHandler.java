@@ -33,7 +33,7 @@ public class GeneralExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException e) {
         return buildResponse(
                 HttpStatus.CONFLICT,
-                "Operazione non possibile: esiste già un fumetto con questo titolo oppure i dati non rispettano i vincoli del database."
+                "Questa operazione non è possibile: esiste già un fumetto con questo titolo oppure i dati non rispettano i vincoli del database."
         );
     }
 

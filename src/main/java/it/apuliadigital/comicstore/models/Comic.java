@@ -1,6 +1,11 @@
 package it.apuliadigital.comicstore.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
@@ -23,4 +28,6 @@ public class Comic {
 
     private int quantity;
 
+    @Column(name = "out_of_stock", nullable = false, columnDefinition = "boolean default true")
+    private boolean outOfStock = true;
 }

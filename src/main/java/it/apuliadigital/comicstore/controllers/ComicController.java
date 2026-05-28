@@ -1,8 +1,18 @@
+
 package it.apuliadigital.comicstore.controllers;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.services.ComicService;
@@ -20,6 +30,7 @@ public class ComicController {
         Comic createdComic = comicService.addComic(comic);
 
         return ResponseEntity.ok(createdComic);
+
     }
 
     @GetMapping("/findByTitle")
@@ -28,6 +39,14 @@ public class ComicController {
         Comic comicFound = comicService.findComicByTitle(title);
 
         return ResponseEntity.ok(comicFound);
+    }
+
+    @GetMapping("/findByFilter")
+    public ResponseEntity<List<Comic>> findComicsByFilter(@RequestParam String filter) {
+
+        List<Comic> comics = comicService.findComicsByFilter(filter);
+
+        return ResponseEntity.ok(comics);
     }
 
     @PutMapping("/stockComic")
@@ -52,5 +71,21 @@ public class ComicController {
         Comic updatedComic = comicService.updateComic(id, comicDetails);
 
         return ResponseEntity.ok(updatedComic);
+    }
+
+    @PutMapping("/toggleOutOfStock")
+    public ResponseEntity<List<Comic>> toggleOutOfStock() {
+
+        List<Comic> updatedComics = comicService.toggleOutOfStock();
+
+        return ResponseEntity.ok(updatedComics);
+    }
+
+    @GetMapping("/findLowStock")
+    public ResponseEntity<List<String>> findLowStock() {
+
+        List<String> outOfStockTitles = comicService.findLowStock();
+
+        return ResponseEntity.ok(outOfStockTitles);
     }
 }
