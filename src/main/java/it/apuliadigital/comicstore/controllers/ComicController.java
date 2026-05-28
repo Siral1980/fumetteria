@@ -1,5 +1,7 @@
 package it.apuliadigital.comicstore.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +17,15 @@ import it.apuliadigital.comicstore.services.ComicService;
 @RestController
 @RequestMapping("/comics")
 public class ComicController {
-     @Autowired
+
+    @Autowired
     private ComicService comicService;
 
     @PostMapping("/addComic")
     public ResponseEntity<Comic> createComic(@RequestParam String title,
-                                           @RequestParam String author,
-                                           @RequestParam String genre,
-                                           @RequestParam double price                                         
-    ) {
+                                             @RequestParam String author,
+                                             @RequestParam String genre,
+                                             @RequestParam double price) {
         Comic comic = new Comic();
         comic.setTitle(title);
         comic.setAuthor(author);
@@ -37,38 +39,56 @@ public class ComicController {
     public ResponseEntity<Comic> getComicByTitle(@RequestParam String title) {
         Comic comic = comicService.getComicByTitle(title);
         return ResponseEntity.ok(comic);
-}
+    }
 
     @PutMapping("/updateQuantity")
-    public ResponseEntity<Comic> updateQuantityComic(@RequestParam String title, @RequestParam int quantity) {
+    public ResponseEntity<Comic> updateQuantityComic(@RequestParam String title,
+                                                     @RequestParam int quantity) {
         Comic comic = comicService.getComicByTitle(title);
         Comic updatedComic = comicService.updateQuantityComic(comic, quantity);
         return ResponseEntity.ok(updatedComic);
     }
-    @PutMapping("/sellComic")
-public ResponseEntity<?> sellComic(@RequestParam String title,
-                                   @RequestParam int quantity) {
-    Comic comic = comicService.getComicByTitle(title);
-    if (comic.getQuantity() < quantity) {
-        return ResponseEntity.badRequest()
-                .body("Not enough stock. Available: " + comic.getQuantity());
-    }
-    Comic soldComic = comicService.updateQuantityComic(comic, comic.getQuantity() - quantity);
-    return ResponseEntity.ok(soldComic);
-}
 
-@PutMapping("/updateComic")
-public ResponseEntity<Comic> updateComic(@RequestParam String title,
-                                         @RequestParam String newTitle,
-                                         @RequestParam String author,
-                                         @RequestParam String genre,
-                                         @RequestParam double price) {
-    Comic comic = comicService.getComicByTitle(title);
-    comic.setTitle(newTitle);
-    comic.setAuthor(author);
-    comic.setGenre(genre);
-    comic.setPrice(price);
-    Comic updatedComic = comicService.updateComic(comic);
-    return ResponseEntity.ok(updatedComic);
-}
+    @PutMapping("/sellComic")
+    public ResponseEntity<?> sellComic(@RequestParam String title,
+                                       @RequestParam int quantity) {
+        Comic comic = comicService.getComicByTitle(title);
+        if (comic.getQuantity() < quantity) {
+            return ResponseEntity.badRequest()
+                    .body("Not enough stock. Available: " + comic.getQuantity());
+        }
+        Comic soldComic = comicService.updateQuantityComic(comic, comic.getQuantity() - quantity);
+        return ResponseEntity.ok(soldComic);
+    }
+
+    @PutMapping("/updateComic")
+    public ResponseEntity<Comic> updateComic(@RequestParam String title,
+                                             @RequestParam String newTitle,
+                                             @RequestParam String author,
+                                             @RequestParam String genre,
+                                             @RequestParam double price) {
+        Comic comic = comicService.getComicByTitle(title);
+        comic.setTitle(newTitle);
+        comic.setAuthor(author);
+        comic.setGenre(genre);
+        comic.setPrice(price);
+        Comic updatedComic = comicService.updateComic(comic);
+        return ResponseEntity.ok(updatedComic);
+    }
+
+    @GetMapping("/findByFilter")
+    public ResponseEntity<List<Comic>> findByFilter(@RequestParam String keyword) {
+        return ResponseEntity.ok(comicService.findByFilter(keyword));
+    }
+
+    @PutMapping("/outOfStockToggle")
+    public ResponseEntity<Void> outOfStockToggle() {
+        comicService.outOfStockToggle();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/findLowStock")
+    public ResponseEntity<List<String>> findLowStock() {
+        return ResponseEntity.ok(comicService.findLowStock());
+    }
 }
