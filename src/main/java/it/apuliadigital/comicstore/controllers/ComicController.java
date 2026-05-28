@@ -136,5 +136,15 @@ public class ComicController {
         }
         return ResponseEntity.ok(names);
     }
+
+    /**
+     * Restock all comics (set outOfStock to false)
+     */
+    @PutMapping("/restock")
+    @Operation(summary = "Restock all comics", description = "Marks all comics as back in stock (outOfStock = false)")
+    public ResponseEntity<Void> restockAll() {
+        comicService.restockAll();
+        return ResponseEntity.noContent().build();
+    }
 }
 

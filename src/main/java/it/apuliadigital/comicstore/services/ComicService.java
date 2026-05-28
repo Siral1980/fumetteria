@@ -110,5 +110,16 @@ public class ComicService {
     public List<String> findLowStock() {
         return comicRepository.findOutOfStockNames();
     }
+
+    /**
+     * Restocks all comics (sets outOfStock to false)
+     */
+    public void restockAll() {
+        List<Comic> allComics = comicRepository.findAll();
+        for (Comic comic : allComics) {
+            comic.setOutOfStock(false);
+            comicRepository.save(comic);
+        }
+    }
 }
 
