@@ -1,11 +1,13 @@
 package it.apuliadigital.comicstore.services;
 
-import it.apuliadigital.comicstore.models.Comic;
-import it.apuliadigital.comicstore.repositories.ComicRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import it.apuliadigital.comicstore.models.Comic;
+import it.apuliadigital.comicstore.repositories.ComicRepository;
 
 @Service
 public class ComicService {
@@ -18,6 +20,7 @@ public class ComicService {
      */
     public Comic addComic(Comic comic) {
         comic.setQuantity(0);
+        comic.setOutOfStock(true);
         return comicRepository.save(comic);
     }
 
@@ -81,6 +84,31 @@ public class ComicService {
      */
     public Optional<Comic> getComicById(Long id) {
         return comicRepository.findById(id);
+    }
+
+    /**
+     * Finds comics by partial filter on title or author
+     */
+    public List<Comic> findByFilter(String filter) {
+        return comicRepository.findByFilter(filter);
+    }
+
+    /**
+     * Toggles the outOfStock status for all comics based on quantity
+     */
+    public void toggleOutOfStock() {
+        List<Comic> allComics = comicRepository.findAll();
+        for (Comic comic : allComics) {
+            comic.setOutOfStock(comic.getQuantity() <= 0);
+            comicRepository.save(comic);
+        }
+    }
+
+    /**
+     * Finds all out of stock comic names
+     */
+    public List<String> findLowStock() {
+        return comicRepository.findOutOfStockNames();
     }
 }
 

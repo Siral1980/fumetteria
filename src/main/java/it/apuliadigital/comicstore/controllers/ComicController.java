@@ -1,13 +1,23 @@
 package it.apuliadigital.comicstore.controllers;
 
-import it.apuliadigital.comicstore.models.Comic;
-import it.apuliadigital.comicstore.services.ComicService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.apuliadigital.comicstore.models.Comic;
+import it.apuliadigital.comicstore.services.ComicService;
 
 @RestController
 @RequestMapping("/comics")
@@ -89,6 +99,42 @@ public class ComicController {
             @RequestBody Comic comicDetails) {
         Comic updatedComic = comicService.updateComic(id, comicDetails);
         return ResponseEntity.ok(updatedComic);
+    }
+
+    /**
+     * Find comics by partial filter on title or author
+     */
+    @GetMapping("/filter")
+    @Operation(summary = "Find comics by filter", description = "Searches for comics by partial title or author")
+    public ResponseEntity<List<Comic>> findByFilter(@RequestParam String filter) {
+        List<Comic> comics = comicService.findByFilter(filter);
+        if (comics.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(comics);
+    }
+
+    /**
+     * Toggle out of stock status for all comics based on quantity
+     */
+    @PutMapping("/toggle-stock-status")
+    @Operation(summary = "Toggle out of stock status", description = "Updates outOfStock field based on quantity for all comics")
+    public ResponseEntity<Void> toggleOutOfStock() {
+        comicService.toggleOutOfStock();
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Get all out of stock comic names
+     */
+    @GetMapping("/low-stock/names")
+    @Operation(summary = "Find low stock comic names", description = "Retrieves names of all out of stock comics")
+    public ResponseEntity<List<String>> findLowStock() {
+        List<String> names = comicService.findLowStock();
+        if (names.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(names);
     }
 }
 
