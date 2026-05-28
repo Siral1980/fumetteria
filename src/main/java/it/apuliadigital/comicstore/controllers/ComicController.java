@@ -1,4 +1,4 @@
-package it.apuliadigital.comicstore.controllers;
+﻿package it.apuliadigital.comicstore.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,24 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import it.apuliadigital.comicstore.models.Comic;
-import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.services.ComicService;
-import it.apuliadigital.comicstore.services.SellService;
 
 @RestController
 @RequestMapping("/comics")
 public class ComicController {
      @Autowired
     private ComicService comicService;
-    @Autowired
-    private SellService sellService;
 
     @PostMapping("/addComic")
     public ResponseEntity<Comic> createComic(@RequestParam String title,
@@ -57,32 +49,11 @@ public class ComicController {
         Comic updatedComic = comicService.updateQuantityComic(title, quantity);
         return ResponseEntity.ok(updatedComic);
     }
-    
-    @PutMapping("/sellComic")
-    public ResponseEntity<Sell> sellComic(@RequestParam String title, @RequestParam int quantity) {
-        Sell sell = sellService.sellComic(title, quantity);
-        return ResponseEntity.ok(sell);
-    }
 
     @PutMapping("/restockComic")
     public ResponseEntity<Comic> restockComic(@RequestParam String title,  String author,  String genre, double price) {
         Comic updatedComic = comicService.updateComic(title, author, genre, price);
         return ResponseEntity.ok(updatedComic);
-    }
-
-    @GetMapping("/sales/byDate")
-    public ResponseEntity<List<Sell>> getSalesByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
-        List<Sell> sales = sellService.findSalesByDateRange(start, end);
-        return ResponseEntity.ok(sales);
-    }
-
-    @GetMapping("/sales/byAmount")
-    public ResponseEntity<List<Sell>> getSalesByAmount(
-            @RequestParam BigDecimal amount) {
-        List<Sell> sales = sellService.findSalesByAmountGreaterThan(amount);
-        return ResponseEntity.ok(sales);
     }
 
     @GetMapping("/searchByAuthorAndTitle")
@@ -91,4 +62,14 @@ public class ComicController {
         return ResponseEntity.ok(comics);
     }
 
+    @PutMapping("/toggleOutOfStock")
+    public ResponseEntity<List<Comic>> toggleOutOfStockStatus() {
+        List<Comic> updatedComics = comicService.toggleOutOfStockStatus();
+        return ResponseEntity.ok(updatedComics);
+}
+    @GetMapping("/getComicsOutOfStock")
+    public ResponseEntity<List<Comic>> getComicsOutOfStock() {
+        List<Comic> comics = comicService.getComicsOutOfStock();
+        return ResponseEntity.ok(comics);
+    }
 }

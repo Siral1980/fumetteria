@@ -50,4 +50,8 @@ public List<Sell> findSalesByDateRange(LocalDate start, LocalDate end) {
 public List<Sell> findSalesByAmountGreaterThan(BigDecimal amount) {
     return sellRepository.findByTotalAmountGreaterThan(amount);
 }
+
+public List<Sell> findAllSales() {
+    return sellRepository.findAll();
+}
 }

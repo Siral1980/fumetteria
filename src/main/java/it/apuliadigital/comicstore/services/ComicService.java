@@ -86,5 +86,21 @@ public Comic updateComic(
         return comicRepository.findAll();
     }
 
-   
+   public List<Comic> toggleOutOfStockStatus() {
+    List<Comic> comics = comicRepository.findAll();
+    for (Comic comic : comics) {
+        if (comic.getQuantity() > 0) {
+            comic.setOutOfStock(false);
+        } else {
+            comic.setOutOfStock(true);
+        }
+    }
+    return comicRepository.saveAll(comics);
+}
+
+    public List<Comic> getComicsOutOfStock() {
+       List<Comic> comics = comicRepository.findAll();
+       return comics.stream().filter(Comic::isOutOfStock).toList();
+    }
+
 }
