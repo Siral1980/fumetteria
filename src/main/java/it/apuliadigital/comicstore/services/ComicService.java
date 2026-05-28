@@ -3,13 +3,13 @@ package it.apuliadigital.comicstore.services;
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.repositories.ComicRepository;
+import it.apuliadigital.comicstore.repositories.SellRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import it.apuliadigital.comicstore.repositories.SellRepository;
-
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,10 +18,15 @@ public class ComicService {
     @Autowired
     private ComicRepository comicRepository;
 
+    @Autowired
+    private SellRepository sellRepository;
+
     // Punto 2 - Add Comic
     public Comic addComic(Comic comic) {
-        comic.setQuantity(0); // forza sempre quantity a 0 indipendentemente dall'input
+        comic.setQuantity(0);
+        comic.setOutOfStock(true);
         return comicRepository.save(comic);
+
     }
 
     // Punto 2 - Find Comic by Title
@@ -30,23 +35,20 @@ public class ComicService {
     }
 
     public Comic stockComic(Long id, int quantityToAdd) {
-    Comic comic = comicRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + id));
-
-    comic.setQuantity(comic.getQuantity() + quantityToAdd);
-    return comicRepository.save(comic);
-}
+        Comic comic = comicRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + id));
+        comic.setQuantity(comic.getQuantity() + quantityToAdd);
+        return comicRepository.save(comic);
+    }
 
 // Punto 4 - Sell Comic
-@Autowired  // ← MANCANTE
-private SellRepository sellRepository;
 public Sell sellComic(Long comicId, int quantityToSell) {
-    Comic comic = comicRepository.findById(comicId)
-            .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + comicId));
+        Comic comic = comicRepository.findById(comicId)
+                .orElseThrow(() -> new RuntimeException("Fumetto non trovato con id: " + comicId));
 
-    if (comic.getQuantity() < quantityToSell) {
-        throw new RuntimeException("Quantità disponibile insufficiente. Disponibili: " + comic.getQuantity());
-    }
+        if (comic.getQuantity() < quantityToSell) {
+            throw new RuntimeException("Quantità disponibile insufficiente. Disponibili: " + comic.getQuantity());
+        }
 
     // Aggiorna la quantità del fumetto
     comic.setQuantity(comic.getQuantity() - quantityToSell);
@@ -76,4 +78,19 @@ public Comic updateComic(Long id, Comic updatedComic) {
     return comicRepository.save(existing);
 }
 
+// Punto 8 - Find By Filter
+public List<Comic> findByFilter(String query) {
+    return comicRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query);
+}
+
+public void toggleOutOfStock() {
+        List<Comic> allComics = comicRepository.findAll();
+        allComics.forEach(comic -> comic.setOutOfStock(comic.getQuantity() == 0));
+        comicRepository.saveAll(allComics);
+    }
+
+// Punto 10 - Find out of Stock
+public List<String> findOutOfStock() {
+        return comicRepository.findTitlesOutOfStock();
+    }
 }

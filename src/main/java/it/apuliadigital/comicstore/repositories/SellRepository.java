@@ -11,10 +11,7 @@ import java.util.List;
 @Repository
 public interface SellRepository extends JpaRepository<Sell, Long> {
 
-    // Vendite in un range di date
     List<Sell> findBySellingDateBetween(LocalDateTime from, LocalDateTime to);
 
-    // Vendite con totale superiore ad un importo
     List<Sell> findByTotalAmountGreaterThan(BigDecimal amount);
 }
-

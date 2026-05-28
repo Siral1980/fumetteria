@@ -12,7 +12,7 @@ public class Comic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String title;
 
     private String author;
@@ -23,4 +23,7 @@ public class Comic {
 
     private int quantity;
 
+    private boolean outOfStock = true;
+
 }
+

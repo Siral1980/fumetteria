@@ -3,6 +3,8 @@ package it.apuliadigital.comicstore.controllers;
 import it.apuliadigital.comicstore.models.Comic;
 import it.apuliadigital.comicstore.models.Sell;
 import it.apuliadigital.comicstore.services.ComicService;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,6 +64,28 @@ public class ComicController {
     } catch (RuntimeException e) {
         return ResponseEntity.notFound().build();
     }
+}
+
+    // Ricerca parziale su titolo e autore
+    @GetMapping("/filter")
+    public ResponseEntity<List<Comic>> findByFilter(@RequestParam String query) {
+        List<Comic> results = comicService.findByFilter(query);
+        return ResponseEntity.ok(results);
+}
+
+    // Aggiorna outOfStock su tutti i fumetti
+    @PatchMapping("/toggle-out-of-stock")
+    public ResponseEntity<Void> toggleOutOfStock() {
+        comicService.toggleOutOfStock();
+        return ResponseEntity.noContent().build();
+}
+
+// Lista dei titoli esauriti
+
+@GetMapping("/out-of-stock")
+public ResponseEntity<List<String>> findOutOfStock() {
+    List<String> results = comicService.findOutOfStock();
+    return ResponseEntity.ok(results);
 }
 }
 
