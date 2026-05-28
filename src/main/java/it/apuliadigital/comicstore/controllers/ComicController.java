@@ -1,5 +1,6 @@
 package it.apuliadigital.comicstore.controllers;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,7 +55,11 @@ public class ComicController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-                
+    @GetMapping("/findByFilter")
+    public ResponseEntity<List<Comic>> findByFilter(@RequestParam(required = false) String keyword) {
+        List<Comic> results = comicService.findByFilter(keyword);
+        return ResponseEntity.ok(results);
+    }  
 }
 
 

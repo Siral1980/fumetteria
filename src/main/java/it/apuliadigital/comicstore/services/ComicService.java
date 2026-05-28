@@ -2,6 +2,7 @@ package it.apuliadigital.comicstore.services;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,5 +64,14 @@ public class ComicService {
         comic.setQuantity(comic.getQuantity() - quantity);
         return comicRepository.save(comic);
     }
-
+    public List<Comic> findByFilter(String keyword) {
+        if(keyword == null || keyword.isBlank()){
+            return comicRepository.findAll();
+        }
+        String cleanedKeyword = keyword.trim();
+        return comicRepository.findByTitleContainingIgnoreCaseOrAuthorContainingAllIgnoreCase(
+            cleanedKeyword,
+            cleanedKeyword
+        );
+    }
  }
