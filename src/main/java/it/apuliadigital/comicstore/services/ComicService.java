@@ -54,14 +54,19 @@ public class ComicService {
     return comicRepository.save(comic);
 }
 
-public Comic updateComic(
+public Comic updateComic(Long id,
                            String title,
                            String author,
                            String genre,
                            double price
                            ) {
         // Stessa logica: fail-fast se la canzone non esiste
-        Comic comic = getComicByTitle(title);
+        Comic comic = comicRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Fumetto non trovato con l'ID: " + id));
+
+        if (title != null && !title.isBlank()) {
+            comic.setTitle(title);
+        }
 
         // Controlli per i campi di tipo String
         if (author != null && !author.isBlank()) {
