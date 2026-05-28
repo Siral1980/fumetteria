@@ -79,6 +79,7 @@ public Sell sellComic(String title, int quantity) {
 }
 
 public List<Sell> findSalesByDateRange(LocalDate start, LocalDate end) {
+    
     LocalDateTime startDateTime = start.atStartOfDay();
     LocalDateTime endDateTime = end.plusDays(1).atStartOfDay();
     return sellRepository.findBySellingDateBetween(startDateTime, endDateTime);

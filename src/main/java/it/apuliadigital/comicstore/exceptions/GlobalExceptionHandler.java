@@ -1,4 +1,4 @@
-package it.apuliadigital.comicstore.controllers;
+package it.apuliadigital.comicstore.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
