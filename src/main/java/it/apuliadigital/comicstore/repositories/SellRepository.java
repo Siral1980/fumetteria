@@ -12,9 +12,9 @@ import it.apuliadigital.comicstore.models.Sell;
 @Repository
 public interface SellRepository extends JpaRepository<Sell, Long> {
 
-    // Task 11 - ricerca per range di date
+    // Ricerca per range di date
     List<Sell> findBySellingDateBetween(LocalDateTime start, LocalDateTime end);
 
-    // Task 11 - ricerca per importo superiore
+    // Ricerca per importo superiore
     List<Sell> findByTotalAmountGreaterThan(BigDecimal amount);
 }

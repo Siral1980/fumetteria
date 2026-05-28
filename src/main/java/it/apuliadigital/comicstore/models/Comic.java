@@ -23,6 +23,6 @@ public class Comic {
 
     private int quantity;
 
-    // Task 9: default true perché ogni nuovo fumetto parte con quantity = 0
+    // questo perchè la quantità è uguale a 0
     private boolean outOfStock = true;
 }

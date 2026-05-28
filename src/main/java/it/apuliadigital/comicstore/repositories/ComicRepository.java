@@ -15,9 +15,9 @@ public interface ComicRepository extends JpaRepository<Comic, Long> {
 
     Optional<Comic> findByTitleIgnoreCase(String title);
 
-    // Task 8 - ricerca parziale case-insensitive su titolo o autore
+    // ricerca su titolo o autore
     List<Comic> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String title, String author);
 
-    // Task 10 - tutti i fumetti esauriti
+    //tutti i fumetti esauriti
     List<Comic> findByOutOfStockTrue();
 }

@@ -15,13 +15,13 @@ public class Sell {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private LocalDateTime sellingDate;      // c. data e orario della vendita
+    private LocalDateTime sellingDate;      
 
-    private int sellingQuantity;            // b. quantità venduta
+    private int sellingQuantity;            
 
-    private BigDecimal totalAmount;         // d. prezzo totale (comicPrice * sellingQuantity)
+    private BigDecimal totalAmount;         
 
     @ManyToOne
     @JoinColumn(name = "comic_id", nullable = false)
-    private Comic comic;                    // a. fumetto venduto
+    private Comic comic;                    
 }

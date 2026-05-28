@@ -22,39 +22,46 @@ public class ComicService {
     @Autowired
     private SellRepository sellRepository;
 
+
     public Comic addComic(Comic comic) {
-        try {
-            boolean isFound = comicRepository.existsByTitleAndAuthorAndGenreAndPrice(
+        boolean isFound = comicRepository.existsByTitleAndAuthorAndGenreAndPrice(
                 comic.getTitle(),
                 comic.getAuthor(),
                 comic.getGenre(),
                 comic.getPrice()
-            );
-            if (isFound) {
-                throw new IllegalArgumentException("Il fumetto con lo stesso titolo, autore, genere e prezzo esiste già.");
-            }
-            comic.setQuantity(0);
-            comic.setOutOfStock(true); // Task 9
-            return comicRepository.save(comic);
-        } catch (IllegalArgumentException e) {
-            System.err.println("Errore: " + e.getMessage());
-            throw e;
+        );
+        if (isFound) {
+            throw new IllegalArgumentException("Il fumetto con lo stesso titolo, autore, genere e prezzo esiste già.");
         }
+        comic.setQuantity(0);
+        comic.setOutOfStock(true);
+        return comicRepository.save(comic);
     }
 
+    // Ricerca per titolo
     public Comic getComicByTitle(String title) {
         return comicRepository.findByTitleIgnoreCase(title)
                 .orElseThrow(() -> new IllegalArgumentException("Fumetto non trovato con il titolo: " + title));
     }
 
+    // Aggiunta quantità in magazzino
     public Comic updateQuantityComic(String title, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("La quantità da aggiungere deve essere un valore positivo.");
+        }
         Comic comic = comicRepository.findByTitleIgnoreCase(title)
                 .orElseThrow(() -> new IllegalArgumentException("Fumetto non trovato con il titolo: " + title));
+
         comic.setQuantity(comic.getQuantity() + quantity);
+        comic.setOutOfStock(comic.getQuantity() == 0);
         return comicRepository.save(comic);
     }
 
+    // Vendita fumetto
     public Sell sellComic(String title, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("La quantità da vendere deve essere un valore positivo.");
+        }
         Comic comic = comicRepository.findByTitleIgnoreCase(title)
                 .orElseThrow(() -> new IllegalArgumentException("Fumetto non trovato con il titolo: " + title));
 
@@ -62,30 +69,23 @@ public class ComicService {
             throw new IllegalArgumentException("Quantità insufficiente per vendere il fumetto: " + title);
         }
 
+        BigDecimal totalAmount = BigDecimal.valueOf(comic.getPrice())
+                .multiply(BigDecimal.valueOf(quantity));
+
         Sell sell = new Sell();
         sell.setComic(comic);
         sell.setSellingDate(LocalDateTime.now());
         sell.setSellingQuantity(quantity);
-        BigDecimal totalAmount = new BigDecimal(String.valueOf(comic.getPrice() * quantity));
         sell.setTotalAmount(totalAmount);
 
         comic.setQuantity(comic.getQuantity() - quantity);
-        comic.setOutOfStock(comic.getQuantity() == 0); // Task 9
+        comic.setOutOfStock(comic.getQuantity() == 0);
 
         comicRepository.save(comic);
         return sellRepository.save(sell);
     }
 
-    public List<Sell> findSalesByDateRange(LocalDate start, LocalDate end) {
-        LocalDateTime startDateTime = start.atStartOfDay();
-        LocalDateTime endDateTime = end.plusDays(1).atStartOfDay();
-        return sellRepository.findBySellingDateBetween(startDateTime, endDateTime);
-    }
-
-    public List<Sell> findSalesByAmountGreaterThan(BigDecimal amount) {
-        return sellRepository.findByTotalAmountGreaterThan(amount);
-    }
-
+    //  Aggiornamento dati fumetto 
     public Comic updateComic(String title, String author, String genre, double price) {
         Comic comic = getComicByTitle(title);
         if (author != null && !author.isBlank()) comic.setAuthor(author);
@@ -94,12 +94,13 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
-    
+    //  Ricerca parziale su titolo o autore
     public List<Comic> findByFilter(String keyword) {
-        return comicRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(keyword, keyword);
+        return comicRepository
+                .findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(keyword, keyword);
     }
 
-    
+    // Toggle outOfStock su tutti i fumetti in base alla quantity
     public void toggleOutOfStock() {
         List<Comic> allComics = comicRepository.findAll();
         for (Comic comic : allComics) {
@@ -108,11 +109,51 @@ public class ComicService {
         comicRepository.saveAll(allComics);
     }
 
-    
+    //  Restituisce solo i titoli dei fumetti esauriti
     public List<String> findOutOfStockTitles() {
-        List<Comic> outOfStock = comicRepository.findByOutOfStockTrue();
-        return outOfStock.stream()
+        return comicRepository.findByOutOfStockTrue()
+                .stream()
                 .map(Comic::getTitle)
                 .toList();
+    }
+
+    // sellComicHistory
+    public Sell sellComicHistory(String title, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("La quantità da vendere deve essere un valore positivo.");
+        }
+        Comic comic = comicRepository.findByTitleIgnoreCase(title)
+                .orElseThrow(() -> new IllegalArgumentException("Fumetto non trovato con il titolo: " + title));
+
+        if (comic.getQuantity() < quantity) {
+            throw new IllegalArgumentException("Quantità insufficiente per vendere il fumetto: " + title);
+        }
+
+        BigDecimal totalAmount = BigDecimal.valueOf(comic.getPrice())
+                .multiply(BigDecimal.valueOf(quantity));
+
+        Sell sell = new Sell();
+        sell.setComic(comic);                     
+        sell.setSellingQuantity(quantity);        
+        sell.setSellingDate(LocalDateTime.now()); 
+        sell.setTotalAmount(totalAmount);         
+
+        comic.setQuantity(comic.getQuantity() - quantity);
+        comic.setOutOfStock(comic.getQuantity() == 0);
+
+        comicRepository.save(comic);
+        return sellRepository.save(sell);
+    }
+
+    // Ricerca vendite per range di date
+    public List<Sell> findSalesByDateRange(LocalDate start, LocalDate end) {
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.plusDays(1).atStartOfDay();
+        return sellRepository.findBySellingDateBetween(startDateTime, endDateTime);
+    }
+
+    // Ricerca vendite per importo superiore
+    public List<Sell> findSalesByAmountGreaterThan(BigDecimal amount) {
+        return sellRepository.findByTotalAmountGreaterThan(amount);
     }
 }
