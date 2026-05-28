@@ -1,5 +1,7 @@
 package it.apuliadigital.comicstore.controllers; // Pacchetto dei controller.
  
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired; // Per inserire il service automaticamente.
 import org.springframework.http.ResponseEntity; // Oggetto che rappresenta una risposta HTTP.
 import org.springframework.web.bind.annotation.*; // Importa RestController, RequestMapping, GetMapping, ecc.
@@ -23,33 +25,41 @@ public class ComicController {
     }
  
     @GetMapping("/findByTitle") // Endpoint GET /api/comics/findByTitle?title=...
-    public ResponseEntity<Comic> findComicByTitle(@RequestParam String title) { // title arriva dai parametri URL.
- 
-        Comic comicFound = comicService.findComicByTitle(title); // Chiamo il service.
- 
-        return ResponseEntity.ok(comicFound); // Restituisco il fumetto trovato.
+    public ResponseEntity<Comic> findComicByTitle(@RequestParam String title) {
+        Comic comicFound = comicService.findComicByTitle(title);
+        return ResponseEntity.ok(comicFound);
     }
- 
+
+    @GetMapping("/findByFilter") // Endpoint GET /api/comics/findByFilter?search=...
+    public ResponseEntity<List<Comic>> findComicsByFilter(@RequestParam String search) {
+        return ResponseEntity.ok(comicService.findComicsByFilter(search));
+    }
+
     @PutMapping("/stockComic") // Endpoint PUT /api/comics/stockComic?title=...&quantity=...
     public ResponseEntity<Comic> stockComic(@RequestParam String title, @RequestParam int quantity) {
- 
-        Comic updatedComic = comicService.stockComic(title, quantity); // Aggiungo copie.
- 
-        return ResponseEntity.ok(updatedComic); // Restituisco il fumetto aggiornato.
+        Comic updatedComic = comicService.stockComic(title, quantity);
+        return ResponseEntity.ok(updatedComic);
     }
-     @PutMapping("/sellComic") // Endpoint PUT /api/comics/sellComic?title=...&quantity=...
+
+    @PutMapping("/sellComic") // Endpoint PUT /api/comics/sellComic?title=...&quantity=...
     public ResponseEntity<Comic> sellComic(@RequestParam String title, @RequestParam int quantity) {
- 
-        Comic updatedComic = comicService.sellComic(title, quantity); // Vendo copie.
- 
-        return ResponseEntity.ok(updatedComic); // Restituisco il fumetto aggiornato.
+        Comic updatedComic = comicService.sellComic(title, quantity);
+        return ResponseEntity.ok(updatedComic);
     }
- 
+
+    @PutMapping("/toggleOutOfStock") // Endpoint PUT /api/comics/toggleOutOfStock
+    public ResponseEntity<List<Comic>> toggleOutOfStock() {
+        return ResponseEntity.ok(comicService.toggleOutOfStock());
+    }
+
+    @GetMapping("/findLowStock") // Endpoint GET /api/comics/findLowStock
+    public ResponseEntity<List<String>> findLowStock() {
+        return ResponseEntity.ok(comicService.findLowStockTitles());
+    }
+
     @PutMapping("/updateComic/{id}") // Endpoint PUT /api/comics/updateComic/1.
     public ResponseEntity<Comic> updateComic(@PathVariable Long id, @RequestBody Comic comicDetails) {
- 
-        Comic updatedComic = comicService.updateComic(id, comicDetails); // Aggiorno il fumetto.
- 
-        return ResponseEntity.ok(updatedComic); // Restituisco il fumetto aggiornato.
+        Comic updatedComic = comicService.updateComic(id, comicDetails);
+        return ResponseEntity.ok(updatedComic);
     }
 }
