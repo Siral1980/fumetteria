@@ -6,7 +6,6 @@ import it.apuliadigital.comicstore.repositories.ComicRepository;
 import it.apuliadigital.comicstore.repositories.SellRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +21,7 @@ public class ComicService {
 
     public Comic addComic(Comic comic) {
         comic.setQuantity(0);
+        comic.setOutOfStock(true);
         return comicRepository.save(comic);
     }
 
@@ -31,8 +31,10 @@ public class ComicService {
 
     public Comic stockComic(Long id, int quantityToAdd) {
         Comic comic = comicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fumetto con ID " + id + " non trovato"));
+                .orElseThrow(() -> new RuntimeException("Fumetto non trovato con ID: " + id));
+        
         comic.setQuantity(comic.getQuantity() + quantityToAdd);
+        comic.setOutOfStock(comic.getQuantity() <= 0); // Aggiorna lo stato outOfStock automaticamente
         return comicRepository.save(comic);
     }
 
@@ -45,6 +47,7 @@ public class ComicService {
         }
 
         comic.setQuantity(comic.getQuantity() - quantity);
+        comic.setOutOfStock(comic.getQuantity() <= 0); // Aggiorna lo stato outOfStock automaticamente
         return comicRepository.save(comic);
     }
 
@@ -60,6 +63,25 @@ public class ComicService {
         return comicRepository.save(comic);
     }
 
+    // Task 8: Find By Filter
+    public List<Comic> findByFilter(String keyword) {
+        return comicRepository.findByAuthorContainingIgnoreCaseOrTitleContainingIgnoreCase(keyword, keyword);
+    }
+
+    // Task 9: Out of Stock Toggle (Cicla tutto il DB e sincronizza basandosi sulla quantità)
+    public void toggleOutOfStockStatus() {
+        List<Comic> allComics = comicRepository.findAll();
+        for (Comic c : allComics) {
+            c.setOutOfStock(c.getQuantity() <= 0);
+        }
+        comicRepository.saveAll(allComics);
+    }
+
+    // Task 10: Find Low Stock
+    public List<String> findLowStockTitles() {
+        return comicRepository.findTitlesOfOutOfStockComics();
+    }
+
     // ==========================================
     // BONUS TASK: LOGICA REGISTRAZIONE VENDITE
     // ==========================================
@@ -67,7 +89,6 @@ public class ComicService {
     public Sell sellComicWithSell(Long id, int quantity) {
         Comic comic = sellComic(id, quantity);
 
-        // Calcolo preciso del prezzo totale con BigDecimal
         double comicPrice = comic.getPrice() != null ? comic.getPrice() : 0.0;
         BigDecimal totalAmount = BigDecimal.valueOf(comicPrice).multiply(BigDecimal.valueOf(quantity));
 

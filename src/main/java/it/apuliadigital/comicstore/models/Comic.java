@@ -12,7 +12,6 @@ public class Comic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // AGGIUNGIAMO IL TITOLO (Obbligatorio e Univoco come richiesto)
     @Column(nullable = false, unique = true)
     private String title;
 
@@ -24,4 +23,8 @@ public class Comic {
     private Double price;
 
     private String genre;
+
+    // Task 9: outOfStock impostato a true di default alla creazione (visto che quantity parte da 0)
+    @Column(nullable = false)
+    private boolean outOfStock = true;
 }

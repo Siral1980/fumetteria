@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/comics")
@@ -14,14 +15,11 @@ public class ComicController {
     @Autowired
     private ComicService comicService;
 
-    // 1. Endpoint per aggiungere un fumetto (POST /api/comics)
     @PostMapping
     public ResponseEntity<Comic> addComic(@RequestBody Comic comic) {
-        Comic createdComic = comicService.addComic(comic);
-        return new ResponseEntity<>(createdComic, HttpStatus.CREATED);
+        return new ResponseEntity<>(comicService.addComic(comic), HttpStatus.CREATED);
     }
 
-    // 2. Endpoint per cercare un fumetto per titolo (GET /api/comics/search)
     @GetMapping("/search")
     public ResponseEntity<Comic> findComicByTitle(@RequestParam String title) {
         Comic comic = comicService.findComicByTitle(title);
@@ -31,38 +29,37 @@ public class ComicController {
         return new ResponseEntity<>(comic, HttpStatus.OK);
     }
 
-    // 3. Endpoint per aggiornare lo stock (PUT /api/comics/{id}/stock)
     @PutMapping("/{id}/stock")
     public ResponseEntity<Comic> stockComic(@PathVariable Long id, @RequestParam int quantity) {
-        try {
-            Comic updatedComic = comicService.stockComic(id, quantity);
-            return new ResponseEntity<>(updatedComic, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(comicService.stockComic(id, quantity), HttpStatus.OK);
     }
 
-    // 4. Endpoint per vendere un fumetto (PUT /api/comics/{id}/sell)
     @PutMapping("/{id}/sell")
-    public ResponseEntity<?> sellComic(@PathVariable Long id, @RequestParam int quantity) {
-        try {
-            Comic updatedComic = comicService.sellComic(id, quantity);
-            return new ResponseEntity<>(updatedComic, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Comic> sellComic(@PathVariable Long id, @RequestParam int quantity) {
+        return new ResponseEntity<>(comicService.sellComic(id, quantity), HttpStatus.OK);
     }
 
-    // 5. Endpoint per aggiornare i dettagli di un fumetto (PUT /api/comics/{id})
     @PutMapping("/{id}")
     public ResponseEntity<Comic> updateComic(@PathVariable Long id, @RequestBody Comic comicDetails) {
-        try {
-            Comic updatedComic = comicService.updateComic(id, comicDetails);
-            return new ResponseEntity<>(updatedComic, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(comicService.updateComic(id, comicDetails), HttpStatus.OK);
+    }
+
+    // Task 8: Find By Filter
+    @GetMapping("/filter")
+    public ResponseEntity<List<Comic>> findByFilter(@RequestParam String keyword) {
+        return new ResponseEntity<>(comicService.findByFilter(keyword), HttpStatus.OK);
+    }
+
+    // Task 9: Out of Stock Toggle
+    @PutMapping("/toggle-out-of-stock")
+    public ResponseEntity<Void> toggleOutOfStock() {
+        comicService.toggleOutOfStockStatus();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // Task 10: Find Low Stock
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<String>> getLowStockTitles() {
+        return new ResponseEntity<>(comicService.findLowStockTitles(), HttpStatus.OK);
     }
 }
