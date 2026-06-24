@@ -1,5 +1,6 @@
 package it.apuliadigital.comicstore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,5 +19,6 @@ public class Sell {
     private BigDecimal totalAmount; // comicPrice * sellingQuantity
     @ManyToOne
     @JoinColumn(name = "comic_id", nullable = false)
+    @JsonIgnoreProperties("sells")
     private Comic comic;
 }
