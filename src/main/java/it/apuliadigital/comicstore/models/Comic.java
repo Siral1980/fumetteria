@@ -23,4 +23,6 @@ public class Comic {
 
     private int quantity;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean outOfStock = true;
 }
